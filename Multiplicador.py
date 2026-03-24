@@ -18,7 +18,7 @@ def init_browser():
     opts.add_argument("--log-level=3")
     opts.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
     driver = webdriver.Chrome(options=opts)
-    driver.get("https://br.tradingview.com/symbols/AMEX-KOLD/")
+    driver.get("https://br.tradingview.com/symbols/AMEX-SOXL/")
 
 def read_price():
     global TMV_PRICE
@@ -41,22 +41,22 @@ def read_price():
 
 def update_ui():
     """Calcula e atualiza a interface só com a terceira variável"""
-    v1 = 49.46
-    v2 = TMV_PRICE
-    res = v1 * v2
+    Cotas = 25.91
+    Cotacao = TMV_PRICE
+    res = Cotas *Cotacao
     
     # limite definido na sua regra
-    limite = 898.76 
+    limite = 959.35
     
     cor = "#21b315" if res >= limite else "#f38ba8"
     
-    if v2 == 0.0:
+    if Cotacao == 0.0:
         texto = "Calculando..."
         cor = "#cdd6f4"
     else:
         # Calcular a diferença percentual em relação ao limite
         pct = ((res - limite) / limite) * 100
-        texto = f"{res:,.2f} ({pct:+.2f}%) {v2:,.2f}"
+        texto = f"{res:,.2f} ({pct:+.2f}%) {Cotacao:,.2f}"
     
     resultado.config(text=texto, fg=cor)
 
