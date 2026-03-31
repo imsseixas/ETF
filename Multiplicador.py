@@ -1,4 +1,5 @@
 import tkinter as tk
+import webbrowser
 import threading
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -8,6 +9,7 @@ from datetime import datetime
 
 TMV_PRICE = 0.0
 driver = None
+url = "https://br.tradingview.com/symbols/AMEX-SOXL/"
 
 def init_browser():
     global driver
@@ -19,7 +21,7 @@ def init_browser():
     opts.add_argument("--log-level=3")
     opts.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
     driver = webdriver.Chrome(options=opts)
-    driver.get("https://br.tradingview.com/symbols/AMEX-SOXS/")
+    driver.get(url)
 
 def read_price():
     global TMV_PRICE
@@ -49,12 +51,12 @@ def read_price():
 
 def update_ui():
     """Calcula e atualiza a interface só com a terceira variável"""
-    # limite / Cotas = 36,77
-    Cotas = 25.08
+    # limite / Cotas = 41.61
+    Cotas = 41.61
     Cotacao = TMV_PRICE
     res = Cotas *Cotacao
     # limite definido na sua regra
-    limite = 922.63
+    limite = 1824.56
     
     cor = "#21b315" if res >= limite else "#f38ba8"
     
@@ -62,9 +64,10 @@ def update_ui():
         texto = "Calculando..."
         cor = "#cdd6f4"
     else:
-        # Calcular a diferença percentual em relação ao limite
-        pct = ((res - limite) / limite) * 100
-        texto = f"{res:,.2f} ({pct:+.2f}%) {Cotacao:,.2f}"
+        # Calcular a diferença percentual e o lucro absoluto em relação ao limite
+        lucro = res - limite
+        pct = (lucro / limite) * 100
+        texto = f"${res:,.2f} ({pct:+.2f}% | ${lucro:+,.2f}) ${Cotacao:,.2f}"
     
     resultado.config(text=texto, fg=cor)
     if 'position_widget' in globals():
@@ -115,6 +118,9 @@ def position_widget():
     y = sh - h - 45
     root.geometry(f"{w}x{h}+{x}+{y}")
 
+def open_link(e=None):
+    webbrowser.open(url)
+
 # --- UI ---
 root = tk.Tk()
 root.overrideredirect(True)
@@ -125,10 +131,12 @@ root.configure(bg="#1e1e2e")
 
 frame = tk.Frame(root, bg="#1e1e2e")
 frame.pack(padx=2, pady=2)
+frame.bind("<Double-Button-1>", open_link)
 
 resultado = tk.Label(frame, text="0", font=("Segoe UI", 16, "bold"),
                      bg="#1e1e2e", fg="#cdd6f4", anchor="center", padx=10)
 resultado.grid(row=0, column=0, padx=3, pady=3)
+resultado.bind("<Double-Button-1>", open_link)
 
 swap_btn = tk.Label(frame, text="⇄", font=("Segoe UI", 11, "bold"), bg="#1e1e2e", fg="#585b70", cursor="hand2")
 swap_btn.grid(row=0, column=1, padx=(5, 2))
