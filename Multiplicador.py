@@ -30,7 +30,7 @@ def read_price():
         is_after_hours = now.hour >= 17 or now.hour < 10 or (now.hour == 10 and now.minute < 30)
         
         if is_after_hours:
-            selector = '#js-category-content > div.js-symbol-page-header-root > div > div.symbolRow-NopKb87z > div > div.quotesRow-iJMmXWiA > div:nth-child(2) > div > div.lastContainer-zoF9r75I > span.last-zoF9r75I.last-NYvR1HH2.js-symbol-ext-hrs-close'
+            selector = '#js-category-content > div.js-symbol-page-header-root > div > div.symbolRow-IzU2Iqkz > div > div.quotesRow-QSRrQgkm > div:nth-child(2) > div > div.lastContainer-fzcYMweq > span.last-fzcYMweq.last-jwKPw8uE.js-symbol-ext-hrs-close'
         else:
             selector = 'span[class*="last-"]'
             
@@ -51,12 +51,12 @@ def read_price():
 
 def update_ui():
     """Calcula e atualiza a interface só com a terceira variável"""
-    # limite / Cotas = 41.61
-    Cotas = 41.61
+    # limite / Cotas = 124,91
+    Cotas = 23.82
     Cotacao = TMV_PRICE
     res = Cotas *Cotacao
     # limite definido na sua regra
-    limite = 1824.56
+    limite = 2651.08
     
     cor = "#21b315" if res >= limite else "#f38ba8"
     
